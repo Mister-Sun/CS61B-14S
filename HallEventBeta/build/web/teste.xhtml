@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <head> 
+        <title>TODO supply a title</title>
+        <meta name="viewport" content="width=device-width"/>
+    </head>
+    <body>
+        <h:form id="formEvento">
+            <p:commandButton value="Visualizar relatório"    
+                             action="#{gestorService.imprimir()}"     
+                             style="width: 100px;font-family: Tahoma;font-size: 12px" ajax="false"/>  
+        </h:form>
+    </body>
+</html>

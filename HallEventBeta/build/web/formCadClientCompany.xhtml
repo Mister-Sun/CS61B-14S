@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:head> 
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link href="#{facesContext.externalContext.requestContextPath}/resources/css/default.css" rel="stylesheet" type="text/css" />
+        <link href="#{facesContext.externalContext.requestContextPath}/resources/css/cssLayout.css" rel="stylesheet" type="text/css" />
+        <script src="#{facesContext.externalContext.requestContextPath}/js/geral.js" type="text/javascript" />
+        <script src="#{facesContext.externalContext.requestContextPath}/js/global.js" type="text/javascript" />
+    </h:head>
+    <body style="width: 510px;">
+        <div align="center">
+            <p:ajaxStatus style="width:220px;height:19px;" id="ajaxStatusPanel" onstart="dlg1.show();" oncomplete="dlg1.hide();"/>  
+            <p:dialog id="basicDialog" widgetVar="dlg1" modal="true" closable="false" resizable="false" >  
+                <h:graphicImage value="/images/ajax-loader-2.gif" />
+            </p:dialog>
+            <br/>
+            <h:form id="formEmpresa" style="width: 580px;">
+                <p:messages autoUpdate="true" id="msg"/>
+                <p:growl autoUpdate="true" id="eventosmsg" life="5000"/>
+                <p:panel id="acordion" style="width: 580px;">
+                    <p:panel visible="true" id="companyData" header="DADOS DA EMPRESA" style="border:transparent " >
+                        <h:panelGrid columns="3" style="font-size: 11px;">
+                            <h:panelGroup>
+                                <h:outputLabel id="cnpjLabel" value="CNPJ" for="cnpjField" style="font-weight: bold"/><br/>
+                                <p:inputMask id="cnpjField" value="#{cadClientCompany.personCom.company.cnpj}" required="#{cadClientCompany.validCompany}" requiredMessage="Informe o CNPJ da empresa"
+                                             style="width: 192px" mask="99.999.999/9999-99">
+                                    <p:ajax event="blur" listener="#{cadClientCompany.validateCompany}" update="formEmpresa"/>
+                                </p:inputMask>
+                            </h:panelGroup>
+                            <h:panelGroup>
+                                <h:outputLabel id="openLabel" value="ABERTURA" for="openField" style="font-weight: bold"/><br/>
+                                <p:inputMask id="openField" value="#{cadClientCompany.personCom.company.openingDate}" style="width: 120px" mask="99/99/9999"
+                                             required="#{cadClientCompany.validCompany}" disabled="#{cadClientCompany.disableFields}" validatorMessage="Data inválida" requiredMessage="Informe a data de abertura">
+                                    <f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+                                </p:inputMask>
+                            </h:panelGroup>
+                            <h:panelGroup>
+                                <h:outputLabel id="numFunLabel" value="Nº COLABORADORES" for="numFunField" style="font-weight: bold"/><br/>
+                                <p:inputText id="numFunField" value="#{cadClientCompany.personCom.company.employees}" disabled="#{cadClientCompany.disableFields}" style="width: 120px" required="#{cadClientCompany.validCompany}" requiredMessage="Informe a quantidade de colaboradores" onkeyup="Maiuscula(this);
+                                        notEspecial(this);" />
+                            </h:panelGroup>
+                        </h:panelGrid>
+                        <h:panelGrid columns="1" style="font-size: 11px;">
+                            <h:panelGroup>
+                                <h:outputLabel id="nameEmpLabel" value="NOME FANTASIA" for="nameEmpField" style="font-weight: bold"/><br/>
+                                <p:inputText id="nameEmpField" value="#{cadClientCompany.personCom.company.tradeName}" disabled="#{cadClientCompany.disableFields}" style="width: 461px" 
+                                             required="#{cadClientCompany.validCompany}" requiredMessage="Informe o nome fantasia da empresa" onkeyup="Maiuscula(this);notEspecial(this);" />
+                            </h:panelGroup>
+                            <h:panelGroup>
+                                <h:outputLabel id="razSocialEmpLabel" value="RAZÃO SOCIAL" for="razSocialEmpField" style="font-weight: bold"/><br/>
+                                <p:inputText id="razSocialEmpField" value="#{cadClientCompany.personCom.company.companyName}" disabled="#{cadClientCompany.disableFields}" style="width: 461px" 
+                                             required="#{cadClientCompany.validCompany}" requiredMessage="Informe a razão social da empresa" onkeyup="Maiuscula(this);
+                                        notEspecial(this);" />
+                            </h:panelGroup>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" style="font-size: 11px">
+                            <h:panelGroup>
+                                <h:outputLabel id="sectorLabel" value="SETOR" for="sectorField" style="font-weight: bold"/><br/>
+                                <p:selectOneMenu value="#{cadClientCompany.personCom.company.sector}" disabled="#{cadClientCompany.disableFields}"
+                                                 required="#{cadClientCompany.validCompany}" requiredMessage="Selecione o setor da sua empresa"
+                                                 id="sectorField" converter="converter" effect="fade" filter="true" filterMatchMode="startsWith"
+                                                 style="width: 140px">
+                                    <p:ajax update="porteField" listener="#{cadClientCompany.loadCompanySize()}"/>
+                                    <f:selectItem itemLabel="Selecione um setor ..." itemValue="" />
+                                    <f:selectItems value="#{cadClientCompany.sectors}" var="sc" itemLabel="#{sc.description}" itemValue="#{sc}"/>
+                                </p:selectOneMenu>
+                            </h:panelGroup>
+                            <h:panelGroup>
+                                <h:outputLabel id="porteLabel" value="PORTE" for="porteField" style="font-weight: bold"/><br/>
+                                <p:selectOneMenu value="#{cadClientCompany.personCom.company.companySize}" disabled="#{cadClientCompany.disableFields}"
+                                                 required="#{cadClientCompany.validCompany}" requiredMessage="Selecione o porte da sua empresa"
+                                                 id="porteField" converter="converter" filter="true" filterMatchMode="startsWith"
+                                                 style="width: 313px">
+                                    <p:ajax update="cnaeField" listener="#{cadClientCompany.loadCnaes}"/>
+                                    <f:selectItem itemLabel="Selecione um porte ..." itemValue="" />
+                                    <f:selectItems value="#{cadClientCompany.comSizes}" var="cs" itemLabel="#{cs.description}" itemValue="#{cs}"/>
+                                </p:selectOneMenu>
+                            </h:panelGroup>
+                        </h:panelGrid>
+                        <h:panelGrid columns="1" style="font-size: 11px">
+                            <h:panelGroup>
+                                <h:outputLabel id="cnaeLabel" value="ATIVIDADE PRINCIPAL" for="cnaeField" style="font-weight: bold"/><br/>
+                                <p:selectOneMenu value="#{cadClientCompany.personCom.company.cnae}" required="#{cadClientCompany.validCompany}" requiredMessage="Selecione a atividade principal da sua empresa"
+                                                 id="cnaeField" converter="converter" effect="fade" filter="true" filterMatchMode="startsWith" disabled="#{cadClientCompany.disableFields}"
+                                                 style="width: 464px">
+                                    <p:ajax update="cnaeField" listener="#{cadClientCompany.loadCnaes}"/>
+                                    <f:selectItem itemLabel="Selecione uma atividade ..." itemValue="" />
+                                    <f:selectItems value="#{cadClientCompany.cnaes}" var="cn" itemLabel="#{cn.activity}" itemValue="#{cn}"/>
+                                </p:selectOneMenu>
+                            </h:panelGroup>
+                            <h:panelGroup>
+                                <h:outputLabel id="countryEmpLabel" value="PAÍS" for="countryEmpField" style="font-weight: bold"/><br/>
+                                <p:selectOneMenu value="#{cadClientCompany.personCom.address.country}" required="#{cadClientCompany.validCompany}" requiredMessage="Selecione o país da sua empresa"
+                                                 id="countryEmpField" effect="fade" filter="true" disabled="#{cadClientCompany.disableFields}" filterMatchMode="startsWith" style="width: 463px" converter="converter">
+                                    <p:ajax update="stateEmpField, cityEmpField, neighEmpField" listener="#{cadClientCompany.loadStates()}"/>
+                                    <f:selectItem itemLabel="Selecione o país ..." itemValue="" />
+                                    <f:selectItems value="#{cadClientCompany.countries}" var="x" itemLabel="#{x.name}" itemValue="#{x}"/>
+                                </p:selectOneMenu>
+                            </h:panelGroup>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" style="font-size: 11px;">
+                            <h:panelGroup id="panelEstado">
+                                <h:outputLabel id="stateEmpLabel" value="ESTADO" for="stateEmpField" style="font-weight: bold"/><br/>
+                                <p:selectOneMenu disabled="#{cadClientCompany.disableStateComp}" value="#{cadClientCompany.personCom.address.state}" 
+                                                 id="stateEmpField" converter="converter" required="true" requiredMessage="Informe o estado de sua empresa."
+                                                 style="width: 180px" effect="fade" filter="true" filterMatchMode="startsWith" >
+                                    <p:ajax update="cityEmpField, neighEmpField" listener="#{cadClientCompany.loadCities()}"/>
+                                    <f:selectItem itemLabel="Selecione um estado ..." itemValue="" />
+                                    <f:selectItems  value="#{cadClientCompany.statesComp}" var="y" itemLabel="#{y.name}" itemValue="#{y}"/>
+                                </p:selectOneMenu>
+                            </h:panelGroup>
+                            <h:panelGroup>
+                                <h:outputLabel id="cityEmpLabel" value="CIDADE" for="cityEmpField" style="font-weight: bold"/><br/>
+                                <p:selectOneMenu value="#{cadClientCompany.personCom.address.city}" required="#{cadClientCompany.validCompany}" requiredMessage="Selecione a cidade da sua empresa"
+                                                 id="cityEmpField" converter="converter" disabled="#{cadClientCompany.disableCityComp}"
+                                                 style="width: 272px" effect="fade" filter="true" filterMatchMode="startsWith" >
+                                    <p:ajax update="neighEmpField" listener="#{cadClientCompany.loadDistricts()}"/>
+                                    <f:selectItem itemLabel="Selecione uma cidade ..." itemValue="" />
+                                    <f:selectItems value="#{cadClientCompany.citiesComp}" var="z" itemLabel="#{z.name}" itemValue="#{z}"/>
+                                </p:selectOneMenu>
+                            </h:panelGroup>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" style="font-size: 11px;">
+                            <h:panelGroup>
+                                <h:outputLabel id="neighEmpLabel" value="BAIRRO" for="neighEmpField" style="font-weight: bold"/><br/>
+                                <p:selectOneMenu value="#{cadClientCompany.personCom.address.district}" required="#{cadClientCompany.validCompany}" requiredMessage="Selecione o bairro da sua empresa"
+                                                 id="neighEmpField" converter="converter" disabled="#{cadClientCompany.disableDistrictComp}"
+                                                 style="width: 380px" effect="fade" filter="true" filterMatchMode="startsWith" >
+                                    <f:selectItem itemLabel="Selecione um bairro ..." itemValue="" />
+                                    <f:selectItems value="#{cadClientCompany.districtsComp}" var="ab" itemLabel="#{ab.name}" itemValue="#{ab}"/>
+                                </p:selectOneMenu>
+                            </h:panelGroup>
+                            <h:panelGroup>
+                                <h:outputLabel id="zipCodeEmpLabel" value="CEP" for="zipCodeEmpField" style="font-weight: bold"/><br/>
+                                <p:inputMask id="zipCodeEmpField" value="#{cadClientCompany.personCom.address.cep}" style="width: 70px" 
+                                             mask="99999-999" disabled="#{cadClientCompany.disableFields}" required="#{cadClientCompany.validCompany}" requiredMessage="Informe o CEP da sua empresa"/>
+                            </h:panelGroup>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" style="font-size: 11px;">
+                            <h:panelGroup>
+                                <h:outputLabel id="logEmpLabel" value="LOGRADOURO" for="logEmpField" style="font-weight: bold"/><br/>
+                                <p:inputText id="logEmpField" disabled="#{cadClientCompany.disableFields}" value="#{cadClientCompany.personCom.address.street}" style="width: 400px" 
+                                             required="#{cadClientCompany.validCompany}" requiredMessage="Informe o logradouro da sua empresa" onkeyup="Maiuscula(this);
+                                        notEspecial(this);"  />
+                            </h:panelGroup>
+                            <h:panelGroup>
+                                <h:outputLabel id="numEmpLabel" value="NÚMERO" for="numEmpField" style="font-weight: bold"/><br/>
+                                <p:inputText id="numEmpField" disabled="#{cadClientCompany.disableFields}" value="#{cadClientCompany.personCom.address.number}" style="width: 47px" onkeyup="Maiuscula(this);
+                                        notEspecial(this);" required="#{cadClientCompany.validCompany}" requiredMessage="Informe o número do endereço comercial da empresa" />
+                            </h:panelGroup>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" style="font-size: 11px;">
+                            <h:panelGroup>
+                                <h:outputLabel id="compEmpLabel" value="COMPLEMENTO" for="compEmpField" style="font-weight: bold"/><br/>
+                                <p:inputText id="compEmpField" disabled="#{cadClientCompany.disableFields}" value="#{cadClientCompany.personCom.address.complement}" style="width: 461px" onkeyup="Maiuscula(this);
+                                        notEspecial(this);"  />
+                            </h:panelGroup>
+                        </h:panelGrid> 
+                        
+                        
+                        
+                        <h:panelGrid columns="2" style="font-size: 11px;">
+                            <h:panelGroup>
+                                <h:outputLabel id="contactComLabel" value="CONTATOS" style="font-weight: bold"/><br/>
+                            </h:panelGroup>
+                            <h:panelGroup>
+                                <p:commandButton disabled="#{cadClientCompany.disableFields}" value="Add" type="button" onclick="dlg2.show();" />
+                                
+                            </h:panelGroup>
+                        </h:panelGrid>
+                        <p:panel id="contactsComPanel" header="CONTATOS" style="border:transparent" >
+                            <p:dataTable id="contactsComTable" rowIndexVar="rowIndex" rowKey="rowIndex" 
+                                         var="contact" value="#{cadClientCompany.personCom.contacts}" emptyMessage="Nenhum registro encontrado" >  
+                                <p:column headerText="N°" >  
+                                    <h:outputText value="#{rowIndex + 1}" />  
+                                </p:column> 
+                                <p:column headerText="Telefone" width="90" >  
+                                    <h:outputText value="#{contact.phone}" />  
+                                </p:column>  
+                                <p:column headerText="Celular" width="90" >  
+                                    <h:outputText value="#{contact.cellphone}" />  
+                                </p:column>
+                                <p:column headerText="Email" >  
+                                    <h:outputText value="#{contact.email}"/>  
+                                </p:column>
+                                <p:column headerText="Principal">  
+                                    <p:selectBooleanCheckbox value="#{contact.main}" />
+                                </p:column>
+                                <p:column headerText="AÇÕES" > 
+                                    <p:commandButton immediate="true" action="#{cadClientCompany.deleteContact(rowIndex)}" update="contactsComPanel, requiredCom" style="width: 30px" ajax="false" icon="ui-icon-trash" />
+                                </p:column> 
+                            </p:dataTable>  
+                        </p:panel>
+                        
+                    </p:panel>
+                    
+                <div align="center">
+                    <h:panelGrid columns="2">
+                        <p:commandButton action="#{cadClientCompany.savePersonCompany()}" update="formEmpresa" value="INSCREVER-SE" disabled="#{cadClientCompany.disableFields}" style="width: 130px" onclick="dlg1.show();" oncomplete="dlg1.hide();" />
+                        <p:commandButton action="#{cadClientCompany.cleanPersonCadastre()}" value="LIMPAR" process="@this" update="formEmpresa" immediate="true" onclick="dlg1.show();" oncomplete="dlg1.hide();" />
+                    </h:panelGrid>
+                </div>
+                </p:panel>
+            </h:form>
+        
+            
+            <h:form id="formdlg2" style="width: 510px;" prependId="false" >
+                <p:dialog header="Effects" widgetVar="dlg2"  height="100">
+                    <h:panelGrid id="pgdlg2" columns="3" style="font-size: 11px;">
+                        <h:panelGroup>
+                            <h:outputLabel id="emailEmpLabel" value="E-MAIL" for="emailEmpField" style="font-weight: bold"/><br/>
+                            <p:inputText id="emailEmpField" value="#{cadClientCompany.contact.email}" style="width: 262px" 
+                                         required="#{cadClientCompany.validCompany}" requiredMessage="Informe o e-mail da sua empresa" onkeyup="Maiuscula(this);" onblur="checkMail(this);" />
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <h:outputLabel id="telEmpLabel" value="TELEFONE" for="telEmpField" style="font-weight: bold"/><br/>
+                            <p:inputMask id="telEmpField" value="#{cadClientCompany.contact.phone}" required="#{cadClientCompany.phone}" 
+                                         requiredMessage="Você precisa informar ao menos um telefone de contato." onblur="#{cadClientCompany.inputPhones(true)}" style="width: 85px" mask="(99)9999-9999"/>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <h:outputLabel id="mobEmpLabel" value="CELULAR" for="mobEmpField" style="font-weight: bold"/><br/>
+                            <p:inputMask id="mobEmpField" value="#{cadClientCompany.contact.cellphone}" required="#{cadClientCompany.cellphone}" 
+                                         requiredMessage="Você precisa informar ao menos um telefone de contato." onblur="#{cadClientCompany.inputPhones(true)}" style="width: 85px" mask="(99)9999-9999"/>
+                        </h:panelGroup>
+                        
+                        
+                        <p:commandButton value="Add"  action="#{cadClientCompany.addComContact()}" update=":formEmpresa:contactsComPanel,pgdlg2" oncomplete="dlg2.hide();"/>
+                        
+                    </h:panelGrid>
+                </p:dialog>
+            </h:form>
+            
+            
+        </div>
+    </body>
+</html>

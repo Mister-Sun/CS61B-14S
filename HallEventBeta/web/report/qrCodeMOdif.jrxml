@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="credencial1" language="groovy" pageWidth="180" pageHeight="110" columnWidth="170" leftMargin="5" rightMargin="5" topMargin="5" bottomMargin="5" uuid="8cd10bdd-6e76-4ea0-9b87-3ee5c50a6bcb">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="barras" class="java.lang.String">
+		<fieldDescription><![CDATA[barras]]></fieldDescription>
+	</field>
+	<field name="nome" class="java.lang.String">
+		<fieldDescription><![CDATA[nome]]></fieldDescription>
+	</field>
+	<field name="tipo" class="java.lang.String">
+		<fieldDescription><![CDATA[tipo]]></fieldDescription>
+	</field>
+	<field name="inscricao" class="java.lang.Long">
+		<fieldDescription><![CDATA[inscricao]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="100" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="8" width="46" height="89" uuid="7a8f20ef-f470-41eb-9530-651c2443c9c2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="46" y="8" width="31" height="89" uuid="552b771b-e799-44bd-9513-902c28cc1e13"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inscricao}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement x="77" y="8" width="88" height="89" uuid="5a9646bc-53af-474f-94ff-b94f34eb9da3"/>
+				<jr:DataMatrix xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" orientation="90">
+					<jr:codeExpression><![CDATA[$F{barras}]]></jr:codeExpression>
+				</jr:DataMatrix>
+			</componentElement>
+		</band>
+	</detail>
+</jasperReport>

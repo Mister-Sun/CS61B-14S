@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+
+<!DOCTYPE html>
+
+
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+
+
+    <h:head> 
+        <!--<meta HTTP-EQUIV="REFRESH" content="0; url=#{regEvents.redirectURL}"/>--> 
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <title>Sign Up Success</title>
+        <link type="text/css" rel="stylesheet" href="dot-luv/skin.css"/>
+    </h:head>
+
+
+
+
+    <body style="background-image:url('http://pwes.rocklin.k12.ca.us/j0439526.jpg');background-position: 50% 0%;background-repeat: no-repeat">
+
+        <script type="text/javascript">
+            // You probably don't want to use globals, but this is just example code
+            var fbAppId = 1536414529927278;
+            var objectToLike = 'http://techcrunch.com/2013/02/06/facebook-launches-developers-live-video-channel-to-keep-its-developer-ecosystem-up-to-date/';
+
+            // This check is just here to make sure you set your app ID. You don't
+            // need to use it in production. 
+
+            /*
+             * This is boilerplate code that is used to initialize
+             * the Facebook JS SDK.  You would normally set your
+             * App ID in this code.
+             */
+
+            // Additional JS functions here
+            window.fbAsyncInit = function() {
+                FB.init({
+                    appId: 1536414529927278, // App ID
+                    status: true, // check login status
+                    cookie: true, // enable cookies to allow the
+                    // server to access the session
+                    xfbml: true, // parse page for xfbml or html5
+                    // social plugins like login button below
+                    version: 'v2.0', // Specify an API version
+                });
+                
+                share();
+
+                // Put additional init code here
+            };
+
+            // Load the SDK Asynchronously
+            (function(d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) {
+                    return;
+                }
+                js = d.createElement(s);
+                js.id = id;
+                js.src = "//connect.facebook.net/en_US/sdk.js";
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+
+            /*
+             * This function makes a call to the og.likes API.  The
+             * object argument is the object you like.  Other types
+             * of APIs may take other arguments. (i.e. the book.reads
+             * API takes a book= argument.)
+             *
+             * Because it's a sample, it also sets the privacy
+             * parameter so that it will create a story that only you
+             * can see.  Remove the privacy parameter and the story
+             * will be visible to whatever the default privacy was when
+             * you added the app.
+             *
+             * Also note that you can view any story with the id, as
+             * demonstrated with the code below.
+             *
+             * APIs used in postLike():
+             * Call the Graph API from JS:
+             *   https://developers.facebook.com/docs/reference/javascript/FB.api
+             * The Open Graph og.likes API:
+             *   https://developers.facebook.com/docs/reference/opengraph/action-type/og.likes
+             * Privacy argument:
+             *   https://developers.facebook.com/docs/reference/api/privacy-parameter
+             */
+
+
+            function share() {
+                FB.ui({
+                    method: 'share',
+                    href: 'http://eeits.pa.sebrae.com.br/',
+                }, function(response) {
+                });
+            }
+        </script>
+        
+        <p style="text-align: center;"><img alt="" src="http://www.fomentapa.com.br/2014/images/fmt-utils/logo-p.png" style="height:122px; line-height:1.6; width:301px" /></p>
+
+        <p style="text-align: center;"><strong>Thank you for sign up in Formenta!</strong></p>
+
+        <p style="text-align: center;"><strong>Hope you enjoy our event!</strong></p>
+
+        <p style="text-align: center;"><strong>Sincerely,</strong></p>
+
+        <p style="text-align: center;"><strong>Formenta.</strong></p>
+        <h:outputText style="text-align: center;" value="#{InvitationService.url}"></h:outputText>>
+
+    </body>
+</html>

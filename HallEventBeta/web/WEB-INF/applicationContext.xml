@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<b:beans xmlns="http://www.springframework.org/schema/security"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:b="http://www.springframework.org/schema/beans"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+                            http://www.springframework.org/schema/beans/spring-beans.xsd
+                            http://www.springframework.org/schema/security
+                            http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+
+    <http auto-config="true" use-expressions="true">
+        <intercept-url pattern="/index.htm" access="hasRole('TESTE')" />
+        <intercept-url pattern="/formInscEventos.htm" access="hasRole('TESTE')" />
+        <intercept-url pattern="/formCadEvento.htm" access="hasRole('TESTE')" />
+        <intercept-url pattern="/formCadAccount.htm" access="hasRole('TESTE')" />
+        <intercept-url pattern="/formEvaEvents.htm" access="hasRole('TESTE')" />
+        <form-login login-page="/login.htm" authentication-failure-url="/login.htm?erro=true"/>
+    </http>
+    
+    <authentication-manager>
+        <authentication-provider>
+            <jdbc-user-service data-source-ref="dataSource"
+               users-by-username-query="SELECT username, password, enable FROM login WHERE username=?"
+               authorities-by-username-query="SELECT l.username as username, p.name as authority FROM login l, profile p WHERE l.username=? and l.profile_id = p.id"
+            />
+        </authentication-provider>
+    </authentication-manager>
+
+    <b:bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
+        <b:property name="url" value="jdbc:postgresql://localhost:5432/formenta" />
+        <b:property name="driverClassName" value="org.postgresql.Driver" />
+        <b:property name="username" value="postgres" />
+        <b:property name="password" value="root" />
+    </b:bean>
+
+</b:beans>

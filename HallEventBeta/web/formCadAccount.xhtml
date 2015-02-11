@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head> 
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link href="#{facesContext.externalContext.requestContextPath}/resources/css/default.css" rel="stylesheet" type="text/css" />
+        <link href="#{facesContext.externalContext.requestContextPath}/resources/css/cssLayout.css" rel="stylesheet" type="text/css" />
+        <script src="#{facesContext.externalContext.requestContextPath}/js/geral.js" type="text/javascript" />
+        <script src="#{facesContext.externalContext.requestContextPath}/js/global.js" type="text/javascript" />
+    </h:head>
+    <body style="width: 510px;">
+        <div align="center">
+            <p:ajaxStatus style="width:220px;height:19px;" id="ajaxStamyFormtusPanel" onstart="dlg1.show();" oncomplete="dlg1.hide();"/>  
+            <p:dialog id="basicDialog" widgetVar="dlg1" modal="true" closable="false" resizable="false" >  
+                <h:graphicImage value="/images/ajax-loader-2.gif" />
+            </p:dialog> 
+            <br/>
+            <h:form id="formAccount" style="width: 700px;">
+                <p:messages autoUpdate="true" id="msg"/>
+                <p:growl autoUpdate="true" id="eventosmsg" life="5000"/>
+                <p:panel id="acordion" style="width: 700px;" >
+                    <h:panelGrid columns="2" style="font-size: 11px;">
+                        <h:panelGroup>
+                            <h:outputLabel id="accountComLabel" value="Account" style="font-weight: bold"/><br/>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <p:commandButton value="Add" type="button" onclick="dlg1.show();" />
+
+                        </h:panelGroup>
+                    </h:panelGrid>
+                    <p:panel id="accountsComPanel" header="Account Information" style="border:transparent" >
+                        <p:dataTable id="accountsComTable" rowIndexVar="rowIndex" rowKey="rowIndex" 
+                                     var="account" value="#{cadClientAccount.client.bankAccounts}" emptyMessage="Nenhum registro encontrado" >  
+                            <p:column headerText="N°" >  
+                                <h:outputText value="#{rowIndex + 1}" />  
+                            </p:column> 
+                            <p:column headerText="Agency Number" >  
+                                <h:outputText value="#{account.agencyNumber}"/>  
+                            </p:column>
+                            <p:column headerText="Account Number" width="90" >  
+                                <h:outputText value="#{account.accountNumber}" />  
+                            </p:column>
+                            <p:column headerText="Holder's Name" width="90" >  
+                                <h:outputText value="#{account.cardHolder}" />  
+                            </p:column>  
+                            <p:column headerText="CPF" >  
+                                <h:outputText value="#{account.cpf}"/>  
+                            </p:column>
+                            <p:column headerText="CNPJ" >  
+                                <h:outputText value="#{account.cnpj}"/>  
+                            </p:column>
+                        </p:dataTable>  
+                    </p:panel>
+
+                    <h:panelGroup>
+                        <p:commandButton value="Save" action="#{cadClientAccount.saveAccount()}" />
+                    </h:panelGroup>
+                </p:panel>
+
+
+            </h:form>
+
+
+            <h:form id="formdlg1" style="width: 510px;" prependId="false" >
+                <p:dialog header="Effects" widgetVar="dlg1"  height="100">
+                    <h:panelGrid id="pgdlg1" columns="5" style="font-size: 11px;">
+
+                        <h:panelGroup>
+                            <h:outputLabel id="agencyNumLabel" value="Agency Number" style="font-weight: bold"/><br/>
+                            <p:inputText required="true" requiredMessage="Informe o local do evento" id="expireDateField" value="#{cadClientAccount.bankAccount.agencyNumber}" />
+                        </h:panelGroup>
+
+                        <h:panelGroup>
+                            <h:outputLabel id="holderNameLabel" value="Holer's Name" style="font-weight: bold"/><br/>
+                            <p:inputText required="true" requiredMessage="Informe o local do evento" id="holderNameField" value="#{cadClientAccount.bankAccount.cardHolder}" />
+                        </h:panelGroup>
+
+                        <h:panelGroup>
+                            <h:outputLabel id="cardNumberLabel" value="Account Number" style="font-weight: bold"/><br/>
+                            <p:inputText required="true" requiredMessage="Informe o local do evento" id="cardNumberField" value="#{cadClientAccount.bankAccount.accountNumber}" />
+                        </h:panelGroup>
+
+                        <h:panelGroup>
+                            <h:outputLabel id="postCodeLabel" value="CPF" style="font-weight: bold"/><br/>
+                            <p:inputText required="true" requiredMessage="Informe o local do evento" id="postCodeField" value="#{cadClientAccount.bankAccount.cpf}" />
+                        </h:panelGroup>
+
+                        <h:panelGroup>
+                            <h:outputLabel id="secretCodeLabel" value="CNPJ" style="font-weight: bold"/><br/>
+                            <p:inputText required="true" requiredMessage="Informe o local do evento" id="secretCodeField" value="#{cadClientAccount.bankAccount.cnpj}" />
+                        </h:panelGroup>
+
+                        <p:commandButton value="Add"  action="#{cadClientAccount.addAccount()}" update=":formAccount:accountsComPanel,pgdlg1" oncomplete="dlg1.hide();"/>
+
+                    </h:panelGrid>
+                </p:dialog>
+            </h:form>
+
+        </div>
+    </body>
+</html>
